@@ -1,0 +1,774 @@
+/* ==========================================================================
+   AuraAudio Neo-Retro Hardware Studio & Cyber-Acoustic Theme
+   Aura-Dark 2.0 • Precision Machined Master Deck Styling
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   01. ROOT & CORE APPLICATION CANVAS
+   -------------------------------------------------------------------------- */
+
+.root {
+    -fx-base: #05070D;
+    -fx-background: #05070D;
+    -fx-control-inner-background: #0A0F1D;
+    -fx-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -fx-text-fill: #E2E8F0;
+    -fx-accent: #38BDF8;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.main-window {
+    -fx-background-color: #030509;
+    -fx-border-color: #1E293B;
+    -fx-border-width: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   02. CUSTOM TITLE BAR & HARDWARE CONTROL BUTTONS
+   -------------------------------------------------------------------------- */
+
+.custom-title-bar {
+    -fx-background-color: #070B14;
+    -fx-border-color: #1E293B;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 7px 16px 7px 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 8, 0.0, 0, 2);
+}
+
+/* STRICTLY NO GRADIENTS: Precision-machined solid tactile buttons */
+.win-control-btn {
+    -fx-background-color: #0B0F19;
+    -fx-border-color: #1E293B;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-text-fill: #94A3B8;
+    -fx-font-family: 'JetBrains Mono', 'Consolas', monospace;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-pref-width: 32px;
+    -fx-pref-height: 26px;
+    -fx-cursor: hand;
+    -fx-padding: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 3, 0.0, 0, 1);
+}
+
+.win-control-btn:hover {
+    -fx-background-color: #162032;
+    -fx-border-color: #38BDF8;
+    -fx-text-fill: #F1F5F9;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.35), 6, 0.2, 0, 0);
+}
+
+.win-control-btn:pressed {
+    -fx-background-color: #03060C;
+    -fx-border-color: #0284C7;
+    -fx-text-fill: #38BDF8;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.9), 4, 0.4, 0, 1);
+}
+
+.win-close-btn {
+    -fx-background-color: #0B0F19;
+    -fx-border-color: #1E293B;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-text-fill: #94A3B8;
+    -fx-font-family: 'JetBrains Mono', 'Consolas', monospace;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-pref-width: 32px;
+    -fx-pref-height: 26px;
+    -fx-cursor: hand;
+    -fx-padding: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 3, 0.0, 0, 1);
+}
+
+.win-close-btn:hover {
+    -fx-background-color: #7F1D1D;
+    -fx-border-color: #EF4444;
+    -fx-text-fill: #FFFFFF;
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.65), 8, 0.3, 0, 0);
+}
+
+.win-close-btn:pressed {
+    -fx-background-color: #450A0A;
+    -fx-border-color: #DC2626;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.9), 4, 0.5, 0, 1);
+}
+
+/* --------------------------------------------------------------------------
+   03. PRECISION HARDWARE CARDS, PANELS & RACK-MOUNT FRAMES
+   -------------------------------------------------------------------------- */
+
+/* Machined Studio Card Panel */
+.cyber-glass-card {
+    -fx-background-color: #090E17;
+    -fx-background-radius: 10px;
+    -fx-border-color: #243044;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 16, 0.05, 0, 6);
+}
+
+/* Solid Neo-Panel Studio Module */
+.neo-panel {
+    -fx-background-color: #080C14;
+    -fx-background-radius: 8px;
+    -fx-border-color: #1E293B;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.85), 14, 0.1, 0, 4);
+}
+
+/* Etched Rack-Mount Frame with Precision Chamfered Highlight */
+.rack-mount-frame {
+    -fx-background-color: #060910;
+    -fx-background-radius: 8px;
+    -fx-border-color: #334155 #0F172A #020617 #0F172A;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.9), 18, 0.15, 0, 8);
+}
+
+/* Hardware Chassis Panel */
+.hardware-panel {
+    -fx-background-color: #0A0F1B;
+    -fx-background-radius: 6px;
+    -fx-border-color: #1E293B;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+}
+
+/* Outer Bezel Frame for Cathode Ray and CRT Visualizers */
+.bezel-display-frame {
+    -fx-background-color: #020408;
+    -fx-background-radius: 8px;
+    -fx-border-color: #334155;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.95), 12, 0.5, 0, 2);
+}
+
+/* Etched Sunken Card Well */
+.etched-recess-card {
+    -fx-background-color: #03050A;
+    -fx-background-radius: 6px;
+    -fx-border-color: #1E293B;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.9), 8, 0.4, 0, 1);
+}
+
+/* --------------------------------------------------------------------------
+   04. SOLID TACTILE HARDWARE BUTTONS (STRICTLY NO GRADIENTS)
+   -------------------------------------------------------------------------- */
+
+/* Primary Transport Button (Machined Studio Key) */
+.play-btn, .neo-btn-primary {
+    -fx-background-color: #0F172A;
+    -fx-background-radius: 10px;
+    -fx-border-color: #38BDF8;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-text-fill: #38BDF8;
+    -fx-font-family: 'JetBrains Mono', 'Segoe UI', monospace;
+    -fx-font-size: 15px;
+    -fx-font-weight: 800;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.35), 8, 0.2, 0, 1);
+}
+
+.play-btn:hover, .neo-btn-primary:hover {
+    -fx-background-color: #162238;
+    -fx-border-color: #00F0FF;
+    -fx-text-fill: #00F0FF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 240, 255, 0.7), 12, 0.35, 0, 0);
+}
+
+.play-btn:pressed, .neo-btn-primary:pressed {
+    -fx-background-color: #030712;
+    -fx-border-color: #0284C7;
+    -fx-text-fill: #38BDF8;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.9), 6, 0.5, 0, 2);
+}
+
+/* Secondary Transport & Utility Pushbuttons */
+.icon-btn, .neo-btn-icon, .neo-btn-secondary {
+    -fx-background-color: #0D1322;
+    -fx-background-radius: 8px;
+    -fx-border-color: #243044;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 4, 0.0, 0, 2);
+}
+
+.icon-btn:hover, .neo-btn-icon:hover, .neo-btn-secondary:hover {
+    -fx-background-color: #162035;
+    -fx-border-color: #475569;
+    -fx-text-fill: #F1F5F9;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.2), 6, 0.1, 0, 0);
+}
+
+.icon-btn:pressed, .neo-btn-icon:pressed, .neo-btn-secondary:pressed {
+    -fx-background-color: #050811;
+    -fx-border-color: #38BDF8;
+    -fx-text-fill: #38BDF8;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.85), 4, 0.4, 0, 1);
+}
+
+/* Master Mode Switcher Toggle Buttons */
+.view-toggle-btn, .neo-btn-toggle {
+    -fx-background-color: #0B0F19;
+    -fx-background-radius: 6px;
+    -fx-border-color: #1E293B;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-text-fill: #94A3B8;
+    -fx-font-family: 'JetBrains Mono', 'Consolas', monospace;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-padding: 5px 12px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 3, 0.0, 0, 1);
+}
+
+.view-toggle-btn:hover, .neo-btn-toggle:hover {
+    -fx-background-color: #162035;
+    -fx-border-color: #4F46E5;
+    -fx-text-fill: #E2E8F0;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 6, 0.1, 0, 0);
+}
+
+.view-toggle-btn:pressed, .neo-btn-toggle:pressed {
+    -fx-background-color: #02050A;
+    -fx-border-color: #6366F1;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.9), 4, 0.4, 0, 1);
+}
+
+/* Active Mode Switcher: Solid Indigo with Phosphor LED Halo */
+.view-toggle-btn-active, .neo-btn-toggle-active {
+    -fx-background-color: #17153B;
+    -fx-background-radius: 6px;
+    -fx-border-color: #818CF8;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: 'JetBrains Mono', 'Consolas', monospace;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 5px 12px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(129, 140, 248, 0.6), 10, 0.25, 0, 0);
+}
+
+.view-toggle-btn-active:hover, .neo-btn-toggle-active:hover {
+    -fx-background-color: #242057;
+    -fx-border-color: #A5B4FC;
+    -fx-effect: dropshadow(gaussian, rgba(165, 180, 252, 0.8), 12, 0.35, 0, 0);
+}
+
+/* Hardware Studio Action Pushbuttons */
+.btn-hardware-primary {
+    -fx-background-color: #041E28;
+    -fx-background-radius: 6px;
+    -fx-border-color: #06B6D4;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-text-fill: #22D3EE;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 5px 14px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.35), 6, 0.15, 0, 1);
+}
+
+.btn-hardware-primary:hover {
+    -fx-background-color: #083344;
+    -fx-border-color: #00F0FF;
+    -fx-text-fill: #00F0FF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 240, 255, 0.6), 10, 0.3, 0, 0);
+}
+
+.btn-hardware-amber {
+    -fx-background-color: #211503;
+    -fx-background-radius: 6px;
+    -fx-border-color: #F59E0B;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-text-fill: #FBBF24;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 5px 14px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.35), 6, 0.15, 0, 1);
+}
+
+.btn-hardware-amber:hover {
+    -fx-background-color: #382405;
+    -fx-border-color: #FCD34D;
+    -fx-effect: dropshadow(gaussian, rgba(251, 191, 36, 0.6), 10, 0.3, 0, 0);
+}
+
+/* --------------------------------------------------------------------------
+   05. GLOWING LEAKS & SPECTRAL VISUALIZER FRAMES
+   -------------------------------------------------------------------------- */
+
+/* Studio Analyzer Frame: Recessed display with precision border */
+.analyzer-frame {
+    -fx-background-color: #000000;
+    -fx-background-radius: 8px;
+    -fx-border-color: #0E7490;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.4), 14, 0.15, 0, 0);
+}
+
+/* Radiant Cyan Phosphor Edge Glow Leak */
+.spectral-glow-leak {
+    -fx-background-color: #010408;
+    -fx-background-radius: 8px;
+    -fx-border-color: #06B6D4;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.6), 18, 0.25, 0, 0);
+}
+
+/* Ultraviolet Cathode Ray Tube Enclosure */
+.crt-glow-container {
+    -fx-background-color: #010206;
+    -fx-background-radius: 8px;
+    -fx-border-color: #6366F1;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 18, 0.22, 0, 0);
+}
+
+/* Analog Amber Meter Glow Leak */
+.amber-glow-leak {
+    -fx-background-color: #050300;
+    -fx-background-radius: 8px;
+    -fx-border-color: #F59E0B;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.45), 16, 0.2, 0, 0);
+}
+
+/* Phosphor Green Monitor Glow Leak */
+.phosphor-ambient-leak {
+    -fx-background-color: #000502;
+    -fx-background-radius: 8px;
+    -fx-border-color: #10B981;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.45), 16, 0.2, 0, 0);
+}
+
+/* --------------------------------------------------------------------------
+   06. DEEP TRUE-BLACK BACKGROUNDS & MILLED WELLS
+   -------------------------------------------------------------------------- */
+
+/* True Pitch-Black Sunken Display Well */
+.deep-black-well {
+    -fx-background-color: #000000;
+    -fx-background-radius: 6px;
+    -fx-border-color: #1E293B;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.95), 10, 0.5, 0, 2);
+}
+
+/* Equalizer Well: Recessed hardware slot */
+.eq-canvas-container {
+    -fx-background-color: #020306;
+    -fx-background-radius: 8px;
+    -fx-border-color: #162032;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.9), 8, 0.4, 0, 2);
+}
+
+/* Master Deck Visualizer Container */
+.master-deck-container {
+    -fx-background-color: #030407;
+    -fx-background-radius: 8px;
+    -fx-border-color: #1E293B;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.9), 14, 0.1, 0, 4);
+}
+
+/* Razor-thin Bordered Obsidian Canvas */
+.obsidian-black-canvas {
+    -fx-background-color: #000000;
+    -fx-border-color: #1E293B;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+/* Recessed Display Bezel with Milled Directional Highlights */
+.recessed-bezel {
+    -fx-background-color: #010204;
+    -fx-border-color: #000000 #1E293B #243044 #000000;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.95), 8, 0.5, 0, 1);
+}
+
+/* --------------------------------------------------------------------------
+   07. HARDWARE SCRUBBER, SLIDERS & BUFFERING SWEEP
+   -------------------------------------------------------------------------- */
+
+.slider .track {
+    -fx-background-color: #080C14;
+    -fx-background-radius: 3px;
+    -fx-border-color: #1E293B;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-pref-height: 5px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.8), 4, 0.3, 0, 1);
+}
+
+/* Precision Machined Aluminum Slider Thumb */
+.slider .thumb {
+    -fx-background-color: #1E293B;
+    -fx-background-radius: 8px;
+    -fx-border-color: #38BDF8;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-pref-width: 14px;
+    -fx-pref-height: 14px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.5), 8, 0.3, 0, 0);
+}
+
+.slider .thumb:hover {
+    -fx-background-color: #0F172A;
+    -fx-border-color: #00F0FF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 240, 255, 0.8), 12, 0.5, 0, 0);
+}
+
+.slider .thumb:pressed {
+    -fx-background-color: #020617;
+    -fx-border-color: #67E8F9;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.9), 4, 0.4, 0, 1);
+}
+
+/* Streaming Cache / YouTube-style Pre-Buffer Progress Bar */
+.buffering-sweep {
+    -fx-background-color: #1E293B;
+    -fx-background-radius: 3px;
+    -fx-border-color: #38BDF8;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.4), 6, 0.25, 0, 0);
+}
+
+/* Illuminated Playhead / Needle */
+.scrubber-needle {
+    -fx-background-color: #00F0FF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 240, 255, 0.9), 10, 0.6, 0, 0);
+}
+
+/* --------------------------------------------------------------------------
+   08. LED PULSE INDICATORS & TIMECODE DISPLAYS
+   -------------------------------------------------------------------------- */
+
+/* Neon Cyan Active Status LED */
+.live-led-pulse {
+    -fx-background-color: #00F0FF;
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(0, 240, 255, 0.85), 10, 0.5, 0, 0);
+}
+
+/* Amber Standby / Calibrating LED */
+.live-led-pulse-amber {
+    -fx-background-color: #F59E0B;
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.85), 10, 0.5, 0, 0);
+}
+
+/* Phosphor Green / Lossless Confirmed LED */
+.live-led-pulse-green {
+    -fx-background-color: #10B981;
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.85), 10, 0.5, 0, 0);
+}
+
+/* Crimson Alert / Clipping Peak LED */
+.live-led-pulse-red {
+    -fx-background-color: #EF4444;
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.85), 10, 0.5, 0, 0);
+}
+
+/* High-Contrast Monospace Timecode Display */
+.timecode-display {
+    -fx-font-family: 'JetBrains Mono', 'Consolas', monospace;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #38BDF8;
+    -fx-background-color: #020617;
+    -fx-background-radius: 4px;
+    -fx-border-color: #1E293B;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-padding: 3px 8px;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.25), 6, 0.1, 0, 0);
+}
+
+/* Phosphor Digital Readout Badge */
+.digital-readout {
+    -fx-font-family: 'JetBrains Mono', 'Consolas', monospace;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #00F0FF;
+    -fx-background-color: #030712;
+    -fx-border-color: rgba(6, 182, 212, 0.4);
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 2px 7px;
+}
+
+/* --------------------------------------------------------------------------
+   09. BENCHMARK CHIPS & GUIDELINE MARKINGS
+   -------------------------------------------------------------------------- */
+
+.benchmark-chip {
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+    -fx-padding: 2px 6px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-width: 1px;
+}
+
+.benchmark-chip-lossless {
+    -fx-background-color: #031A14;
+    -fx-border-color: #10B981;
+    -fx-text-fill: #34D399;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.35), 6, 0.2, 0, 0);
+}
+
+.benchmark-chip-320k {
+    -fx-background-color: #031525;
+    -fx-border-color: #06B6D4;
+    -fx-text-fill: #38BDF8;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.35), 6, 0.2, 0, 0);
+}
+
+.benchmark-chip-192k {
+    -fx-background-color: #1B1303;
+    -fx-border-color: #F59E0B;
+    -fx-text-fill: #FBBF24;
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.35), 6, 0.2, 0, 0);
+}
+
+.benchmark-chip-128k {
+    -fx-background-color: #1E0808;
+    -fx-border-color: #EF4444;
+    -fx-text-fill: #F87171;
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.35), 6, 0.2, 0, 0);
+}
+
+.cutoff-warning-chip {
+    -fx-background-color: #2D0606;
+    -fx-border-color: #EF4444;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-text-fill: #FCA5A5;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 2px 7px;
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.5), 8, 0.25, 0, 0);
+}
+
+/* --------------------------------------------------------------------------
+   10. TYPOGRAPHY & CODEC PILLS
+   -------------------------------------------------------------------------- */
+
+.card-title {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
+
+.card-subtitle {
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 11px;
+}
+
+.section-header {
+    -fx-text-fill: #64748B;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+/* Tactile Codec Pill Badge */
+.codec-badge {
+    -fx-background-color: #04121E;
+    -fx-border-color: #0284C7;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-text-fill: #38BDF8;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 3px 10px;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.25), 6, 0.1, 0, 0);
+}
+
+/* --------------------------------------------------------------------------
+   11. FORENSIC INSPECTOR METRIC CARDS & VERDICT BANNER
+   -------------------------------------------------------------------------- */
+
+.metric-card {
+    -fx-background-color: #050811;
+    -fx-background-radius: 8px;
+    -fx-border-color: #1E293B;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.7), 6, 0.2, 0, 1);
+}
+
+.metric-header {
+    -fx-text-fill: #64748B;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+}
+
+.metric-value-cyan {
+    -fx-text-fill: #22D3EE;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
+
+.metric-value-white {
+    -fx-text-fill: #F8FAFC;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
+
+.metric-value-emerald {
+    -fx-text-fill: #34D399;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
+
+.metric-value-purple {
+    -fx-text-fill: #A5B4FC;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
+
+.metric-value-amber {
+    -fx-text-fill: #FBBF24;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
+
+.metric-sub {
+    -fx-text-fill: #64748B;
+    -fx-font-size: 10px;
+}
+
+/* Forensic Verdict Status Banner */
+.verdict-banner {
+    -fx-background-color: #070B14;
+    -fx-border-color: #1E293B;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 8, 0.1, 0, 2);
+}
+
+.verdict-dot {
+    -fx-background-color: #64748B;
+    -fx-background-radius: 5px;
+}
+
+.verdict-label {
+    -fx-text-fill: #94A3B8;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+/* Forensic Audit Log Terminal & Zero-Scroll Cards */
+.audit-cards-container {
+    -fx-spacing: 6px;
+}
+
+.audit-item-card {
+    -fx-background-color: rgba(15, 23, 42, 0.7);
+    -fx-background-radius: 6px;
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-padding: 8px 10px;
+}
+
+.audit-item-card:hover {
+    -fx-background-color: rgba(30, 41, 59, 0.8);
+    -fx-border-color: #38BDF8;
+}
+
+.observations-list {
+    -fx-background-color: #020408;
+    -fx-background-radius: 8px;
+    -fx-border-color: #1E293B;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.9), 8, 0.4, 0, 1);
+}
+
+.observations-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94A3B8;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 11px;
+    -fx-padding: 5px 8px;
+}
+
+.observations-list .list-cell:odd {
+    -fx-background-color: #060912;
+}
+
+/* --------------------------------------------------------------------------
+   12. CNC DRAG & DROP TARGET
+   -------------------------------------------------------------------------- */
+
+.drop-zone {
+    -fx-background-color: #060912;
+    -fx-background-radius: 12px;
+    -fx-border-color: #243044;
+    -fx-border-radius: 12px;
+    -fx-border-style: dashed;
+    -fx-border-width: 1.5px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 8, 0.0, 0, 2);
+}
+
+.drop-zone:hover {
+    -fx-border-color: #38BDF8;
+    -fx-background-color: #0A1428;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.35), 14, 0.2, 0, 0);
+}

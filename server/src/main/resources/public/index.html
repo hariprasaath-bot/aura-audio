@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraAudio • True Lossless Quality Analyzer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0B0F19',
+                        'obsidian-card': 'rgba(17, 24, 39, 0.75)',
+                        'cyber-purple': '#6366F1',
+                        'cyber-cyan': '#06B6D4',
+                        'neon-emerald': '#10B981',
+                        'neon-crimson': '#EF4444',
+                        'neon-amber': '#F59E0B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0B0F19;
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+        .cyber-glass {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glow-accent {
+            box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.4);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.4);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+        .drop-active {
+            border-color: #6366F1 !important;
+            background-color: rgba(99, 102, 241, 0.1) !important;
+            box-shadow: 0 0 35px rgba(99, 102, 241, 0.3) inset;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="h-16 border-b border-white/10 cyber-glass sticky top-0 z-50 px-6 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center glow-accent shadow-lg">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                </svg>
+            </div>
+            <div>
+                <span class="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-cyan-400">AuraAudio</span>
+                <span class="ml-2 text-xs font-mono uppercase px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Lossless DSP 2.0</span>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <!-- Connection Status -->
+            <div id="wsStatusPill" class="flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="wsStatusText">DSP ENGINE CONNECTED</span>
+            </div>
+
+            <!-- Upload Button -->
+            <label class="cursor-pointer flex items-center space-x-2 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg shadow-indigo-600/30 active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                </svg>
+                <span>Analyze Track</span>
+                <input id="fileUploadInput" type="file" accept=".flac,.wav,.mp3,.alac,.m4a,.aiff" class="hidden">
+            </label>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-[1920px] mx-auto w-full">
+
+        <!-- Left / Top Column: Now Playing & Audio Controls (4 cols) -->
+        <section class="lg:col-span-4 flex flex-col space-y-6">
+            <!-- Now Playing Card -->
+            <div class="cyber-glass rounded-2xl p-6 relative overflow-hidden flex flex-col">
+                <div class="flex items-start space-x-5">
+                    <!-- Album Artwork -->
+                    <div class="relative group w-28 h-28 flex-shrink-0 rounded-2xl overflow-hidden bg-slate-800 border border-white/10 shadow-2xl flex items-center justify-center">
+                        <img id="trackArtwork" src="" alt="Album Art" class="w-full h-full object-cover hidden">
+                        <div id="artworkPlaceholder" class="flex flex-col items-center justify-center text-slate-500">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 bg-indigo-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+
+                    <!-- Track Details -->
+                    <div class="flex-1 min-w-0">
+                        <div id="trackCodecBadge" class="inline-block text-[11px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 mb-2 truncate max-w-full">
+                            STANDBY • DROP FILE
+                        </div>
+                        <h2 id="trackTitle" class="text-xl font-bold text-white truncate leading-tight">No Track Loaded</h2>
+                        <p id="trackArtist" class="text-sm text-slate-400 truncate mt-1">Select or drag audio to inspect</p>
+                        <p id="trackAlbum" class="text-xs text-slate-500 truncate mt-0.5">AuraAudio Analyzer Engine</p>
+                    </div>
+                </div>
+
+                <!-- Playback Scrubber & Timestamps -->
+                <div class="mt-6">
+                    <div class="flex justify-between text-xs font-mono text-slate-400 mb-1.5">
+                        <span id="timeElapsed">0:00</span>
+                        <span id="timeDuration">0:00</span>
+                    </div>
+                    <div class="relative w-full h-2 bg-slate-800 rounded-full cursor-pointer overflow-hidden group" id="scrubberTrack">
+                        <div id="scrubberFill" class="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full w-0 transition-all duration-75"></div>
+                    </div>
+                </div>
+
+                <!-- Transport Controls -->
+                <div class="mt-6 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <!-- Loop Button -->
+                        <button id="btnLoop" class="p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-700/60 text-slate-400 hover:text-white transition-colors" title="Toggle Loop">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Main Playback Buttons -->
+                    <div class="flex items-center space-x-4">
+                        <button id="btnPlayPause" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white flex items-center justify-center glow-accent shadow-xl active:scale-95 transition-all">
+                            <svg id="iconPlay" class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <svg id="iconPause" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
+
+                        <button id="btnStop" class="p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-700/60 text-slate-400 hover:text-white transition-colors" title="Stop">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <rect x="6" y="6" width="12" height="12" rx="2"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Volume Slider -->
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+                        </svg>
+                        <input id="volumeSlider" type="range" min="0" max="1" step="0.01" value="0.85" class="w-20 accent-indigo-500 cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drag and Drop Dropzone -->
+            <div id="dropZone" class="cyber-glass rounded-2xl p-8 border-2 border-dashed border-white/10 hover:border-indigo-500/50 transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                    </svg>
+                </div>
+                <h3 class="text-sm font-semibold text-white">Drag & Drop Audio File Here</h3>
+                <p class="text-xs text-slate-400 mt-1">Supports FLAC, WAV, ALAC, MP3, AAC</p>
+                <span class="text-[11px] font-mono text-indigo-400/80 mt-2 px-2.5 py-1 rounded-md bg-indigo-500/10">Instant Lossless Cutoff Verification</span>
+            </div>
+
+            <!-- Real-Time Waveform Peaks Card -->
+            <div class="cyber-glass rounded-2xl p-5 flex flex-col">
+                <h4 class="text-xs font-mono uppercase text-slate-400 tracking-wider mb-3 flex items-center justify-between">
+                    <span>Live Output Dynamics</span>
+                    <span id="liveLevelsText" class="text-cyan-400 font-bold">PEAK -∞ dBFS</span>
+                </h4>
+                <div class="space-y-2">
+                    <div>
+                        <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                            <span>True Peak</span>
+                            <span id="livePeakDbfs" class="font-mono">0.0%</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="barLivePeak" class="h-full bg-gradient-to-r from-emerald-500 via-yellow-400 to-rose-500 w-0 transition-all duration-75"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                            <span>RMS Energy</span>
+                            <span id="liveRmsDbfs" class="font-mono">0.0%</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="barLiveRms" class="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 w-0 transition-all duration-75"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Center & Right: Spectrogram, Visualizers & Forensic Inspector (8 cols) -->
+        <section class="lg:col-span-8 flex flex-col space-y-6">
+
+            <!-- Main Acoustic Visualizer Card -->
+            <div class="cyber-glass rounded-2xl p-6 flex flex-col relative overflow-hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-ping"></div>
+                        <h3 id="visCardTitle" class="text-base font-bold text-white tracking-wide">High-Definition Spectrogram Waterfall</h3>
+                    </div>
+                    <!-- Mode Switcher Buttons -->
+                    <div class="flex items-center space-x-1.5 p-1 rounded-xl bg-slate-900/80 border border-white/10 text-xs font-mono">
+                        <button id="btnWebModeSpectro" class="px-2.5 py-1 rounded-lg bg-indigo-500/30 text-white font-bold border border-indigo-500/50 transition-all">🌌 Spectrogram</button>
+                        <button id="btnWebModeOscillo" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition-all">⚡ Oscilloscope</button>
+                        <button id="btnWebModeBenchmarks" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition-all">📊 Quality Benchmarks</button>
+                    </div>
+                </div>
+
+                <!-- Main Canvas Container -->
+                <div class="relative w-full h-64 bg-black rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+                    <canvas id="spectrogramCanvas" class="w-full h-full block"></canvas>
+
+                    <!-- Frequency Scale Overlays (Spectrogram only) -->
+                    <div id="spectroScaleOverlay" class="absolute right-2 top-0 bottom-0 flex flex-col justify-between py-2 text-[10px] font-mono text-slate-400/90 pointer-events-none select-none text-right">
+                        <span class="bg-black/60 px-1 rounded text-cyan-300">22.05 kHz (Nyquist)</span>
+                        <span class="bg-black/60 px-1 rounded">20.0 kHz</span>
+                        <span class="bg-black/60 px-1 rounded">16.0 kHz (128k Cut)</span>
+                        <span class="bg-black/60 px-1 rounded">10.0 kHz</span>
+                        <span class="bg-black/60 px-1 rounded">5.0 kHz</span>
+                        <span class="bg-black/60 px-1 rounded">0 Hz</span>
+                    </div>
+
+                    <!-- Cutoff Indicator Line (dynamic) -->
+                    <div id="cutoffMarkerLine" class="absolute left-0 right-0 border-b border-rose-500/70 border-dashed pointer-events-none hidden" style="top: 25%;">
+                        <span id="cutoffMarkerText" class="absolute left-2 -top-5 text-[10px] font-mono bg-rose-500/90 text-white px-2 py-0.5 rounded shadow">
+                            Hard Cutoff: 16.2 kHz
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 64-Band Real-Time Equalizer Canvas -->
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-1 text-xs font-mono text-slate-400">
+                        <span>64-BAND LOGARITHMIC SPECTRUM</span>
+                        <span class="text-slate-500">20 Hz ───► 22 kHz</span>
+                    </div>
+                    <div class="w-full h-24 bg-black/50 rounded-xl overflow-hidden border border-white/5 relative">
+                        <canvas id="equalizerCanvas" class="w-full h-full block"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- True Quality Inspector Panel -->
+            <div id="inspectorCard" class="cyber-glass rounded-2xl p-6 flex flex-col border border-white/10">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-white">True Quality Inspector</h3>
+                            <p class="text-xs text-slate-400">Acoustic forensic verification & fake transcode detection</p>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Verdict Status Banner -->
+                    <div id="verdictBanner" class="px-4 py-1.5 rounded-xl border flex items-center space-x-2 text-sm font-bold bg-slate-800/80 text-slate-300 border-white/10">
+                        <span id="verdictDot" class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+                        <span id="verdictLabel">AWAITING AUDIO ANALYSIS</span>
+                    </div>
+                </div>
+
+                <!-- Forensic Metrics Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+                    <!-- Cutoff Frequency -->
+                    <div class="bg-black/30 rounded-xl p-3.5 border border-white/5">
+                        <span class="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Detected Cutoff</span>
+                        <span id="metricCutoff" class="text-lg font-bold font-mono text-cyan-400">-- kHz</span>
+                        <span id="metricCutoffSub" class="text-[10px] text-slate-500 block mt-0.5">Nyquist: -- kHz</span>
+                    </div>
+
+                    <!-- Estimated Original Source -->
+                    <div class="bg-black/30 rounded-xl p-3.5 border border-white/5">
+                        <span class="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Original Bitrate</span>
+                        <span id="metricBitrate" class="text-lg font-bold font-mono text-white">--</span>
+                        <span id="metricBitrateSub" class="text-[10px] text-slate-500 block mt-0.5">Confidence: --%</span>
+                    </div>
+
+                    <!-- Dynamic Range Score -->
+                    <div class="bg-black/30 rounded-xl p-3.5 border border-white/5">
+                        <span class="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Dynamic Range</span>
+                        <span id="metricDR" class="text-lg font-bold font-mono text-emerald-400">--</span>
+                        <span id="metricDRSub" class="text-[10px] text-slate-500 block mt-0.5">Peak/RMS Spread</span>
+                    </div>
+
+                    <!-- Container & Sample Rate -->
+                    <div class="bg-black/30 rounded-xl p-3.5 border border-white/5">
+                        <span class="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Container Details</span>
+                        <span id="metricContainer" class="text-lg font-bold font-mono text-indigo-300">--</span>
+                        <span id="metricContainerSub" class="text-[10px] text-slate-500 block mt-0.5">Bit Depth & Rate</span>
+                    </div>
+                </div>
+
+                <!-- Forensic Audit Trail Findings List -->
+                <div>
+                    <h5 class="text-xs font-mono uppercase text-slate-400 tracking-wider mb-2 flex items-center space-x-1.5">
+                        <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>DSP Forensic Audit Trail</span>
+                    </h5>
+                    <ul id="forensicObservations" class="space-y-1.5 text-xs text-slate-300 font-mono bg-black/25 rounded-xl p-3 border border-white/5 max-h-40 overflow-y-auto">
+                        <li class="text-slate-500 italic">Load an audio track to run frequency spectrum analysis and fake-lossless verification.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Hidden HTML5 Audio Element for Browser Stream Playback -->
+    <audio id="browserAudioPlayer" preload="none" class="hidden"></audio>
+
+    <script type="module">
+        // -------------------------------------------------------------
+        // AuraAudio Web Client Engine
+        // -------------------------------------------------------------
+
+        const fileUploadInput = document.getElementById('fileUploadInput');
+        const dropZone = document.getElementById('dropZone');
+        const wsStatusPill = document.getElementById('wsStatusPill');
+        const wsStatusText = document.getElementById('wsStatusText');
+
+        const trackArtwork = document.getElementById('trackArtwork');
+        const artworkPlaceholder = document.getElementById('artworkPlaceholder');
+        const trackTitle = document.getElementById('trackTitle');
+        const trackArtist = document.getElementById('trackArtist');
+        const trackAlbum = document.getElementById('trackAlbum');
+        const trackCodecBadge = document.getElementById('trackCodecBadge');
+
+        const btnPlayPause = document.getElementById('btnPlayPause');
+        const iconPlay = document.getElementById('iconPlay');
+        const iconPause = document.getElementById('iconPause');
+        const btnStop = document.getElementById('btnStop');
+        const btnLoop = document.getElementById('btnLoop');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        const scrubberTrack = document.getElementById('scrubberTrack');
+        const scrubberFill = document.getElementById('scrubberFill');
+        const timeElapsed = document.getElementById('timeElapsed');
+        const timeDuration = document.getElementById('timeDuration');
+
+        const barLivePeak = document.getElementById('barLivePeak');
+        const barLiveRms = document.getElementById('barLiveRms');
+        const livePeakDbfs = document.getElementById('livePeakDbfs');
+        const liveRmsDbfs = document.getElementById('liveRmsDbfs');
+        const liveLevelsText = document.getElementById('liveLevelsText');
+
+        const verdictBanner = document.getElementById('verdictBanner');
+        const verdictDot = document.getElementById('verdictDot');
+        const verdictLabel = document.getElementById('verdictLabel');
+        const metricCutoff = document.getElementById('metricCutoff');
+        const metricCutoffSub = document.getElementById('metricCutoffSub');
+        const metricBitrate = document.getElementById('metricBitrate');
+        const metricBitrateSub = document.getElementById('metricBitrateSub');
+        const metricDR = document.getElementById('metricDR');
+        const metricDRSub = document.getElementById('metricDRSub');
+        const metricContainer = document.getElementById('metricContainer');
+        const metricContainerSub = document.getElementById('metricContainerSub');
+        const forensicObservations = document.getElementById('forensicObservations');
+
+        const cutoffMarkerLine = document.getElementById('cutoffMarkerLine');
+        const cutoffMarkerText = document.getElementById('cutoffMarkerText');
+
+        const spectrogramCanvas = document.getElementById('spectrogramCanvas');
+        const spectroCtx = spectrogramCanvas.getContext('2d');
+        const equalizerCanvas = document.getElementById('equalizerCanvas');
+        const eqCtx = equalizerCanvas.getContext('2d');
+        const browserAudio = document.getElementById('browserAudioPlayer');
+
+        let ws = null;
+        let isPlaying = false;
+        let currentPosMs = 0;
+        let totalDurationMs = 0;
+        let isLooping = false;
+        let currentNyquistHz = 22050;
+
+        // Resize Canvas dynamically
+        function resizeCanvases() {
+            spectrogramCanvas.width = spectrogramCanvas.parentElement.clientWidth;
+            spectrogramCanvas.height = spectrogramCanvas.parentElement.clientHeight;
+            equalizerCanvas.width = equalizerCanvas.parentElement.clientWidth;
+            equalizerCanvas.height = equalizerCanvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvases);
+        resizeCanvases();
+
+        // -------------------------------------------------------------
+        // Spectrogram Color Gradient: Black -> Deep Indigo -> Purple -> Electric Orange -> Hot White
+        // -------------------------------------------------------------
+        function getSpectrogramColor(intensity) {
+            // intensity: 0.0 to 1.0
+            const clamped = Math.max(0, Math.min(1, intensity));
+            let r = 0, g = 0, b = 0;
+
+            if (clamped < 0.25) {
+                // Black to Deep Indigo (0,0,0) -> (45, 10, 100)
+                const t = clamped / 0.25;
+                r = Math.round(45 * t);
+                g = Math.round(10 * t);
+                b = Math.round(130 * t);
+            } else if (clamped < 0.55) {
+                // Indigo to Purple/Magenta (45, 10, 130) -> (170, 30, 190)
+                const t = (clamped - 0.25) / 0.3;
+                r = Math.round(45 + (170 - 45) * t);
+                g = Math.round(10 + (30 - 10) * t);
+                b = Math.round(130 + (190 - 130) * t);
+            } else if (clamped < 0.85) {
+                // Purple to Electric Orange (170, 30, 190) -> (255, 140, 0)
+                const t = (clamped - 0.55) / 0.3;
+                r = Math.round(170 + (255 - 170) * t);
+                g = Math.round(30 + (140 - 30) * t);
+                b = Math.round(190 * (1 - t));
+            } else {
+                // Electric Orange to Hot White (255, 140, 0) -> (255, 255, 255)
+                const t = (clamped - 0.85) / 0.15;
+                r = 255;
+                g = Math.round(140 + (255 - 140) * t);
+                b = Math.round(255 * t);
+            }
+            return `rgb(${r},${g},${b})`;
+        }
+
+        let currentVisMode = 'spectro'; // 'spectro' | 'oscillo' | 'benchmarks'
+        const btnWebModeSpectro = document.getElementById('btnWebModeSpectro');
+        const btnWebModeOscillo = document.getElementById('btnWebModeOscillo');
+        const btnWebModeBenchmarks = document.getElementById('btnWebModeBenchmarks');
+        const spectroScaleOverlay = document.getElementById('spectroScaleOverlay');
+        const visCardTitle = document.getElementById('visCardTitle');
+
+        function setWebVisMode(mode) {
+            currentVisMode = mode;
+            [btnWebModeSpectro, btnWebModeOscillo, btnWebModeBenchmarks].forEach(b => {
+                b.className = "px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition-all";
+            });
+            if (mode === 'spectro') {
+                btnWebModeSpectro.className = "px-2.5 py-1 rounded-lg bg-indigo-500/30 text-white font-bold border border-indigo-500/50 transition-all";
+                visCardTitle.textContent = "High-Definition Spectrogram Waterfall";
+                spectroScaleOverlay.classList.remove('hidden');
+                if (currentReport && currentReport.cutoffFrequencyHz < currentNyquistHz - 500) {
+                    cutoffMarkerLine.classList.remove('hidden');
+                }
+            } else if (mode === 'oscillo') {
+                btnWebModeOscillo.className = "px-2.5 py-1 rounded-lg bg-indigo-500/30 text-white font-bold border border-indigo-500/50 transition-all";
+                visCardTitle.textContent = "Vector Oscilloscope & Waveform Dynamics";
+                spectroScaleOverlay.classList.add('hidden');
+                cutoffMarkerLine.classList.add('hidden');
+            } else {
+                btnWebModeBenchmarks.className = "px-2.5 py-1 rounded-lg bg-indigo-500/30 text-white font-bold border border-indigo-500/50 transition-all";
+                visCardTitle.textContent = "Audio Quality Benchmarks & Spectral Profile";
+                spectroScaleOverlay.classList.add('hidden');
+                cutoffMarkerLine.classList.add('hidden');
+            }
+        }
+        btnWebModeSpectro.addEventListener('click', () => setWebVisMode('spectro'));
+        btnWebModeOscillo.addEventListener('click', () => setWebVisMode('oscillo'));
+        btnWebModeBenchmarks.addEventListener('click', () => setWebVisMode('benchmarks'));
+
+        function renderWebOscilloscope(wave, peak, rms) {
+            const w = spectrogramCanvas.width;
+            const h = spectrogramCanvas.height;
+            spectroCtx.fillStyle = '#070A12';
+            spectroCtx.fillRect(0, 0, w, h);
+
+            const centerY = h / 2;
+
+            // Graticule Grid
+            spectroCtx.strokeStyle = 'rgba(99, 102, 241, 0.2)';
+            spectroCtx.lineWidth = 1;
+            spectroCtx.beginPath();
+            spectroCtx.moveTo(0, centerY);
+            spectroCtx.lineTo(w, centerY);
+            spectroCtx.stroke();
+
+            // Amplitude grid lines
+            [0.5, 1.0, -0.5, -1.0].forEach(lvl => {
+                const y = centerY - (lvl * (centerY * 0.85));
+                spectroCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+                spectroCtx.beginPath();
+                spectroCtx.moveTo(0, y);
+                spectroCtx.lineTo(w, y);
+                spectroCtx.stroke();
+            });
+
+            // Waveform Trace
+            if (wave && wave.length > 1) {
+                // Glow pass
+                spectroCtx.strokeStyle = 'rgba(6, 182, 212, 0.35)';
+                spectroCtx.lineWidth = 4;
+                drawWavePath(wave, w, centerY);
+
+                // Core beam pass
+                spectroCtx.strokeStyle = '#22D3EE';
+                spectroCtx.lineWidth = 1.8;
+                drawWavePath(wave, w, centerY);
+            }
+
+            // HUD
+            const peakDb = peak > 1e-4 ? (20 * Math.log10(peak)).toFixed(1) : '-∞';
+            const rmsDb = rms > 1e-4 ? (20 * Math.log10(rms)).toFixed(1) : '-∞';
+            spectroCtx.fillStyle = 'rgba(17, 24, 39, 0.85)';
+            spectroCtx.fillRect(10, 10, 240, 24);
+            spectroCtx.fillStyle = '#06B6D4';
+            spectroCtx.font = '10px "JetBrains Mono", monospace';
+            spectroCtx.fillText(`PEAK: ${peakDb} dBFS | RMS: ${rmsDb} dBFS`, 18, 26);
+        }
+
+        function drawWavePath(wave, w, centerY) {
+            spectroCtx.beginPath();
+            for (let i = 0; i < wave.length; i++) {
+                const x = (i / (wave.length - 1)) * w;
+                const y = centerY - (wave[i] * (centerY * 0.85));
+                if (i === 0) spectroCtx.moveTo(x, y); else spectroCtx.lineTo(x, y);
+            }
+            spectroCtx.stroke();
+        }
+
+        function renderWebBenchmarks(mags) {
+            const w = spectrogramCanvas.width;
+            const h = spectrogramCanvas.height;
+            spectroCtx.fillStyle = '#070A12';
+            spectroCtx.fillRect(0, 0, w, h);
+
+            const plotH = h - 24;
+            const maxFreq = currentNyquistHz || 22050;
+
+            // Benchmark Thresholds
+            const marks = [
+                { f: 16000, col: '#EF4444', label: '128k MP3 Cutoff (16.0 kHz)' },
+                { f: 18500, col: '#F97316', label: '192k MP3 Cutoff (18.5 kHz)' },
+                { f: 20500, col: '#F59E0B', label: '320k MP3 Shelf (20.5 kHz)' },
+                { f: 22050, col: '#10B981', label: 'CD Lossless (22.05 kHz)' }
+            ];
+
+            marks.forEach(m => {
+                if (m.f > maxFreq) return;
+                const x = (m.f / maxFreq) * w;
+                spectroCtx.strokeStyle = m.col;
+                spectroCtx.lineWidth = 1;
+                spectroCtx.setLineDash([3, 3]);
+                spectroCtx.beginPath();
+                spectroCtx.moveTo(x, 0);
+                spectroCtx.lineTo(x, plotH);
+                spectroCtx.stroke();
+                spectroCtx.setLineDash([]);
+
+                spectroCtx.fillStyle = m.col;
+                spectroCtx.font = '9px "JetBrains Mono", monospace';
+                spectroCtx.fillText(m.label, Math.max(6, x - 40), 38);
+            });
+
+            // Spectrum Curve
+            if (mags && mags.length > 2) {
+                spectroCtx.beginPath();
+                spectroCtx.moveTo(0, plotH);
+                for (let k = 0; k < mags.length; k++) {
+                    const x = (k / mags.length) * w;
+                    const db = mags[k] > 1e-5 ? (20 * Math.log10(mags[k])) : -100;
+                    const norm = Math.max(0, Math.min(1, (db + 85) / 85));
+                    const y = plotH - (norm * plotH);
+                    spectroCtx.lineTo(x, y);
+                }
+                spectroCtx.lineTo(w, plotH);
+                spectroCtx.closePath();
+                const grad = spectroCtx.createLinearGradient(0, 0, 0, plotH);
+                grad.addColorStop(0, 'rgba(6, 182, 212, 0.4)');
+                grad.addColorStop(1, 'rgba(17, 24, 39, 0.05)');
+                spectroCtx.fillStyle = grad;
+                spectroCtx.fill();
+
+                spectroCtx.strokeStyle = '#06B6D4';
+                spectroCtx.lineWidth = 2;
+                spectroCtx.beginPath();
+                for (let k = 0; k < mags.length; k++) {
+                    const x = (k / mags.length) * w;
+                    const db = mags[k] > 1e-5 ? (20 * Math.log10(mags[k])) : -100;
+                    const norm = Math.max(0, Math.min(1, (db + 85) / 85));
+                    const y = plotH - (norm * plotH);
+                    if (k === 0) spectroCtx.moveTo(x, y); else spectroCtx.lineTo(x, y);
+                }
+                spectroCtx.stroke();
+            }
+
+            // Frequency Axis
+            spectroCtx.fillStyle = '#64748B';
+            spectroCtx.font = '9px "JetBrains Mono", monospace';
+            spectroCtx.fillText('0 Hz', 8, h - 8);
+            spectroCtx.fillText('16 kHz [128k]', (16000 / maxFreq) * w - 24, h - 8);
+            spectroCtx.fillText('20.5 kHz [320k]', (20500 / maxFreq) * w - 28, h - 8);
+            spectroCtx.fillText(`${(maxFreq / 1000).toFixed(1)} kHz [Nyquist]`, w - 95, h - 8);
+        }
+
+        // Spectrogram Waterfall Offscreen Image Buffer for 60fps Scrolling
+        const offscreenCanvas = document.createElement('canvas');
+        const offCtx = offscreenCanvas.getContext('2d');
+        offscreenCanvas.width = 800;
+        offscreenCanvas.height = 256;
+        offCtx.fillStyle = '#000000';
+        offCtx.fillRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+
+        function drawSpectrogramSlice(magnitudes) {
+            const w = offscreenCanvas.width;
+            const h = offscreenCanvas.height;
+
+            // Scroll left by 2 pixels
+            offCtx.drawImage(offscreenCanvas, 2, 0, w - 2, h, 0, 0, w - 2, h);
+
+            // Draw new 2-pixel column on the right edge
+            const numBins = magnitudes ? magnitudes.length : 128;
+            for (let y = 0; y < h; y++) {
+                // Invert y: y=0 is highest frequency (Nyquist), y=h is 0 Hz
+                const binIdx = Math.floor(((h - y) / h) * numBins);
+                const mag = magnitudes && magnitudes[binIdx] ? magnitudes[binIdx] : 0;
+
+                // Decibel-calibrated logarithmic intensity (-80 dBFS to 0 dBFS)
+                const db = mag > 1e-5 ? (20 * Math.log10(mag)) : -100;
+                const normalized = Math.max(0, Math.min(1, (db + 80) / 80));
+                const intensity = Math.pow(normalized, 1.25);
+                offCtx.fillStyle = getSpectrogramColor(intensity);
+                offCtx.fillRect(w - 2, y, 2, 1);
+            }
+
+            // Blit offscreen buffer to active display canvas
+            spectroCtx.drawImage(offscreenCanvas, 0, 0, spectrogramCanvas.width, spectrogramCanvas.height);
+        }
+
+        // 64-Band Equalizer Peak Decay Array
+        const eqPeaks = new Float32Array(64);
+        const eqLevels = new Float32Array(64);
+
+        function renderEqualizer(bands) {
+            const w = equalizerCanvas.width;
+            const h = equalizerCanvas.height;
+            eqCtx.clearRect(0, 0, w, h);
+
+            const numBands = 64;
+            const gap = 2;
+            const barWidth = Math.max(1, (w - (numBands * gap)) / numBands);
+
+            for (let i = 0; i < numBands; i++) {
+                const targetVal = bands && bands[i] ? bands[i] : 0;
+                // Smooth rise and fall
+                if (targetVal > eqLevels[i]) {
+                    eqLevels[i] = targetVal;
+                } else {
+                    eqLevels[i] = Math.max(0, eqLevels[i] - 0.04);
+                }
+
+                // Peak drop
+                if (eqLevels[i] > eqPeaks[i]) {
+                    eqPeaks[i] = eqLevels[i];
+                } else {
+                    eqPeaks[i] = Math.max(0, eqPeaks[i] - 0.012);
+                }
+
+                const barH = eqLevels[i] * (h - 4);
+                const x = i * (barWidth + gap);
+                const y = h - barH;
+
+                // Gradient Bar
+                const grad = eqCtx.createLinearGradient(0, y, 0, h);
+                grad.addColorStop(0, '#06B6D4');
+                grad.addColorStop(0.5, '#6366F1');
+                grad.addColorStop(1, '#312E81');
+
+                eqCtx.fillStyle = grad;
+                eqCtx.fillRect(x, y, barWidth, barH);
+
+                // Peak Cap Indicator
+                const peakY = h - (eqPeaks[i] * (h - 4)) - 2;
+                eqCtx.fillStyle = '#FFFFFF';
+                eqCtx.fillRect(x, Math.max(0, peakY), barWidth, 2);
+            }
+        }
+
+        // -------------------------------------------------------------
+        // WebSocket Connection & Real-Time Stream Handling
+        // -------------------------------------------------------------
+        function connectWebSocket() {
+            const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${location.host}/ws/visualizer`;
+
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                wsStatusPill.className = "flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono";
+                wsStatusText.textContent = "DSP ENGINE CONNECTED";
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'fft') {
+                        // Render active visualizer (Spectrogram, Vector Oscilloscope, or Benchmarks)
+                        if (currentVisMode === 'spectro') {
+                            drawSpectrogramSlice(data.mags);
+                        } else if (currentVisMode === 'oscillo') {
+                            renderWebOscilloscope(data.wave, data.peak, data.rms);
+                        } else if (currentVisMode === 'benchmarks') {
+                            renderWebBenchmarks(data.mags);
+                        }
+                        renderEqualizer(data.bands);
+
+                        // Update Live Peak / RMS
+                        const peakPct = Math.round(data.peak * 100);
+                        const rmsPct = Math.round(data.rms * 100);
+                        barLivePeak.style.width = `${Math.min(100, peakPct)}%`;
+                        barLiveRms.style.width = `${Math.min(100, rmsPct * 2)}%`;
+
+                        const peakDb = data.peak > 1e-4 ? (20 * Math.log10(data.peak)).toFixed(1) : '-∞';
+                        const rmsDb = data.rms > 1e-4 ? (20 * Math.log10(data.rms)).toFixed(1) : '-∞';
+                        livePeakDbfs.textContent = `${peakDb} dBFS`;
+                        liveRmsDbfs.textContent = `${rmsDb} dBFS`;
+                        liveLevelsText.textContent = `PEAK ${peakDb} dBFS`;
+
+                        // Update Position
+                        if (data.pos != null) {
+                            currentPosMs = data.pos;
+                            updatePlaybackProgress();
+                        }
+                    } else if (data.type === 'state') {
+                        setPlayerState(data.state);
+                        if (data.pos != null) currentPosMs = data.pos;
+                    }
+                } catch (e) {
+                    console.error("WS Parse error", e);
+                }
+            };
+
+            ws.onclose = () => {
+                wsStatusPill.className = "flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono";
+                wsStatusText.textContent = "OFFLINE • RECONNECTING...";
+                setTimeout(connectWebSocket, 2000);
+            };
+
+            ws.onerror = () => {
+                ws.close();
+            };
+        }
+
+        // -------------------------------------------------------------
+        // File Upload & Analysis Dispatcher
+        // -------------------------------------------------------------
+        fileUploadInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                uploadAndAnalyze(e.target.files[0]);
+            }
+        });
+
+        // Drag & Drop
+        ['dragenter', 'dragover'].forEach(name => {
+            dropZone.addEventListener(name, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drop-active');
+            });
+        });
+        ['dragleave', 'drop'].forEach(name => {
+            dropZone.addEventListener(name, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drop-active');
+            });
+        });
+        dropZone.addEventListener('drop', (e) => {
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+                uploadAndAnalyze(e.dataTransfer.files[0]);
+            }
+        });
+        dropZone.addEventListener('click', () => fileUploadInput.click());
+
+        async function uploadAndAnalyze(file) {
+            trackTitle.textContent = "Analyzing Audio DSP...";
+            trackArtist.textContent = file.name;
+            trackCodecBadge.textContent = "PROCESSING FFT FRAMES...";
+
+            const formData = new FormData();
+            formData.append('audio', file);
+
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!res.ok) throw new Error(await res.text());
+
+                const data = await res.json();
+                populateInspector(data.report, data.metadata, data.artworkUri);
+
+                // Set up HTML5 Audio stream
+                browserAudio.src = `/api/track/stream?t=${Date.now()}`;
+                browserAudio.load();
+            } catch (err) {
+                alert("Upload failed: " + err.message);
+                console.error(err);
+            }
+        }
+
+        // -------------------------------------------------------------
+        // Populate True Quality Inspector Dashboard
+        // -------------------------------------------------------------
+        function populateInspector(report, meta, artworkUri) {
+            if (!report) return;
+
+            // Track details
+            trackTitle.textContent = meta.title || "Untitled";
+            trackArtist.textContent = meta.artist || "Unknown Artist";
+            trackAlbum.textContent = meta.album || "Unknown Album";
+            totalDurationMs = meta.durationMs || 0;
+            currentNyquistHz = report.nyquistFrequencyHz || 22050;
+
+            const depth = meta.bitDepth > 0 ? `${meta.bitDepth}-bit / ` : '';
+            const rate = (meta.sampleRate / 1000).toFixed(1);
+            const kbps = meta.bitRateKbps > 0 ? ` • ${meta.bitRateKbps} kbps` : '';
+            trackCodecBadge.textContent = `${meta.containerFormat.toUpperCase()} ${depth}${rate} kHz${kbps}`;
+
+            if (artworkUri) {
+                trackArtwork.src = artworkUri;
+                trackArtwork.classList.remove('hidden');
+                artworkPlaceholder.classList.add('hidden');
+            } else {
+                trackArtwork.classList.add('hidden');
+                artworkPlaceholder.classList.remove('hidden');
+            }
+
+            // Verdict Styling
+            const v = report.verdict;
+            verdictLabel.textContent = v.displayName.toUpperCase();
+            verdictBanner.style.borderColor = v.hexColor;
+            verdictBanner.style.backgroundColor = `${v.hexColor}15`;
+            verdictBanner.style.color = v.hexColor;
+            verdictDot.style.backgroundColor = v.hexColor;
+
+            // Metrics
+            const cutoffKHz = (report.cutoffFrequencyHz / 1000).toFixed(1);
+            const nyquistKHz = (report.nyquistFrequencyHz / 1000).toFixed(1);
+            metricCutoff.textContent = `${cutoffKHz} kHz`;
+            metricCutoffSub.textContent = `Nyquist Limit: ${nyquistKHz} kHz`;
+
+            // Cutoff overlay marker on spectrogram
+            if (report.cutoffFrequencyHz < report.nyquistFrequencyHz - 500) {
+                const ratio = report.cutoffFrequencyHz / report.nyquistFrequencyHz;
+                const topPct = (1.0 - ratio) * 100;
+                cutoffMarkerLine.style.top = `${topPct}%`;
+                cutoffMarkerText.textContent = `Cutoff: ${cutoffKHz} kHz (${report.estimatedOriginalBitrate})`;
+                cutoffMarkerLine.classList.remove('hidden');
+            } else {
+                cutoffMarkerLine.classList.add('hidden');
+            }
+
+            metricBitrate.textContent = report.estimatedOriginalBitrate || "Lossless";
+            metricBitrateSub.textContent = `Forensic Conf: ${(report.confidenceScore * 100).toFixed(0)}%`;
+
+            metricDR.textContent = `DR${Math.round(report.dynamicRangeScore)}`;
+            metricDRSub.textContent = `Peak ${report.peakDbfs.toFixed(1)} / RMS ${report.rmsDbfs.toFixed(1)} dBFS`;
+
+            metricContainer.textContent = `${meta.containerFormat.toUpperCase()}`;
+            metricContainerSub.textContent = `${meta.channels} ch • ${meta.bitDepth}-bit`;
+
+            // Forensic Observations List
+            forensicObservations.innerHTML = '';
+            if (report.forensicDetails && report.forensicDetails.length > 0) {
+                report.forensicDetails.forEach(obs => {
+                    const li = document.createElement('li');
+                    li.className = "flex items-start space-x-2";
+                    li.innerHTML = `<span class="text-indigo-400">▹</span><span>${obs}</span>`;
+                    forensicObservations.appendChild(li);
+                });
+            }
+
+            updatePlaybackProgress();
+        }
+
+        // -------------------------------------------------------------
+        // Transport Controls
+        // -------------------------------------------------------------
+        btnPlayPause.addEventListener('click', async () => {
+            if (isPlaying) {
+                await fetch('/api/player/pause', { method: 'POST' });
+                browserAudio.pause();
+            } else {
+                await fetch('/api/player/play', { method: 'POST' });
+                browserAudio.play().catch(() => {});
+            }
+        });
+
+        btnStop.addEventListener('click', async () => {
+            await fetch('/api/player/stop', { method: 'POST' });
+            browserAudio.pause();
+            browserAudio.currentTime = 0;
+            currentPosMs = 0;
+            updatePlaybackProgress();
+            renderEqualizer(null);
+        });
+
+        btnLoop.addEventListener('click', async () => {
+            isLooping = !isLooping;
+            btnLoop.classList.toggle('text-indigo-400', isLooping);
+            btnLoop.classList.toggle('bg-indigo-500/20', isLooping);
+            await fetch(`/api/player/loop?enabled=${isLooping}`, { method: 'POST' });
+        });
+
+        volumeSlider.addEventListener('input', async (e) => {
+            const vol = e.target.value;
+            browserAudio.volume = vol;
+            await fetch(`/api/player/volume?level=${vol}`, { method: 'POST' });
+        });
+
+        scrubberTrack.addEventListener('click', async (e) => {
+            if (totalDurationMs <= 0) return;
+            const rect = scrubberTrack.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+            const seekPos = Math.round(ratio * totalDurationMs);
+
+            currentPosMs = seekPos;
+            browserAudio.currentTime = seekPos / 1000;
+            await fetch(`/api/player/seek?pos=${seekPos}`, { method: 'POST' });
+            updatePlaybackProgress();
+        });
+
+        function setPlayerState(state) {
+            isPlaying = (state === 'PLAYING');
+            if (isPlaying) {
+                iconPlay.classList.add('hidden');
+                iconPause.classList.remove('hidden');
+            } else {
+                iconPlay.classList.remove('hidden');
+                iconPause.classList.add('hidden');
+            }
+        }
+
+        function formatTime(ms) {
+            const totalSec = Math.floor(ms / 1000);
+            const min = Math.floor(totalSec / 60);
+            const sec = totalSec % 60;
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        function updatePlaybackProgress() {
+            timeElapsed.textContent = formatTime(currentPosMs);
+            timeDuration.textContent = formatTime(totalDurationMs);
+            if (totalDurationMs > 0) {
+                const pct = Math.min(100, (currentPosMs / totalDurationMs) * 100);
+                scrubberFill.style.width = `${pct}%`;
+            } else {
+                scrubberFill.style.width = '0%';
+            }
+        }
+
+        // Initialize WebSocket connection
+        connectWebSocket();
+
+        // Initial empty canvas renders
+        drawSpectrogramSlice(null);
+        renderEqualizer(null);
+    </script>
+</body>
+</html>
+
